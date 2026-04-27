@@ -1,0 +1,44 @@
+/* Header styles */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #0074d9; /* blue background */
+  color: #fff; /* white text */
+}
+
+.header__brand {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.header__nav {
+  display: flex;
+  gap: 1rem;
+  font-weight: 600; /* semi-bold */
+}
+
+/* Search bar styles */
+.search-bar {
+  padding: 1rem 2rem;
+}
+
+.search-bar input,
+.search-bar__input {
+  width: 100%;
+  max-width: 480px;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Home page styles */
+.home {
+  padding: 2rem;
+}
+
+.home__placeholder {
+  margin-top: 1rem;
+  color: #666; /* muted color */
+}
