@@ -188,3 +188,20 @@
 .page-status--error {
   color: #d32f2f; /* red override */
 }
+
+/* .fav-btn — small button, sits below card info */
+.fav-btn {
+  background: none;        /* reset browser button styles */
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;       /* small font size */
+  padding: 4px 8px;        /* light padding */
+  color: #666;             /* muted text colour */
+  margin-top: 8px;         /* spacing below card info */
+}
+
+/* .fav-btn--saved — active state */
+.fav-btn.fav-btn--saved {
+  color: #d32f2f;          /* red tone to indicate saved */
+  font-weight: bold;
+}
