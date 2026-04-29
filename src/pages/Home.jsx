@@ -1,77 +1,88 @@
-import { useState, useEffect } from "react";
-import SearchBar from "../components/SearchBar";
-import CountryCard from "../components/CountryCard";
+import { useState, useEffect } from 'react'
+import SearchBar from '../components/SearchBar'
+import CountryCard from '../components/CountryCard'
+import FilterBar from '../components/FilterBar'
 
 function Home() {
-  const [query, setQuery] = useState("");
-  // 1. add state for: countries (array), loading (boolean), error (null)
-  const [countries, setCountries] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [query, setQuery] = useState('')
+  const [countries, setCountries] = useState([])
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
+
+  // 1. add state: region ('All'), sortBy ('')
+  const [region, setRegion] = useState('All')
+  const [sortBy, setSortBy] = useState('')
 
   useEffect(() => {
-    // 2. if query is empty — clear countries and error, return early
     if (!query) {
-      setCountries([]);
-      setError(null);
-      return;
+      setCountries([])
+      setError(null)
+      return
     }
 
-    // 3. set up a debounce timer (400ms)
     const timer = setTimeout(() => {
-      setLoading(true);
-
+      setLoading(true)
       fetch(`https://restcountries.com/v3.1/name/${query}`)
-        .then((res) => {
-          if (!res.ok) {
-            throw new Error("Failed to fetch countries");
-          }
-          return res.json();
+        .then(res => {
+          if (!res.ok) throw new Error('Failed to fetch countries')
+          return res.json()
         })
-        .then((data) => {
-          setCountries(data);
-          setError(null);
+        .then(data => {
+          setCountries(data)
+          setError(null)
         })
-        .catch((err) => {
-          setCountries([]);
-          setError(err.message);
+        .catch(err => {
+          setCountries([])
+          setError(err.message)
         })
-        .finally(() => {
-          setLoading(false);
-        });
-    }, 400);
+        .finally(() => setLoading(false))
+    }, 400)
 
-    // 4. cleanup function cancels the timer
-    return () => clearTimeout(timer);
-  }, [query]);
+    return () => clearTimeout(timer)
+  }, [query])
+
+  // 3. compute displayed — derived from countries
+  const displayed = countries
+    .filter(country => region === 'All' || country.region === region)
+    .sort((a, b) => {
+      if (sortBy === 'name') {
+        return a.name.common.localeCompare(b.name.common)
+      }
+      if (sortBy === 'population') {
+        return b.population - a.population
+      }
+      return 0
+    })
 
   return (
     <div className="home">
       <SearchBar query={query} onQueryChange={setQuery} />
 
-      {/* 5. show a loading paragraph when loading is true */}
-      {loading && <p>Loading...</p>}
+      {/* 2. render FilterBar */}
+      <FilterBar 
+        region={region} 
+        onRegionChange={setRegion} 
+        sortBy={sortBy} 
+        onSortChange={setSortBy} 
+      />
 
-      {/* 6. show an error paragraph when error is set */}
+      {loading && <p>Loading...</p>}
       {error && <p className="error">{error}</p>}
 
-      {/* 7. when not loading, no error, countries.length > 0 */}
-      {!loading && !error && countries.length > 0 && (
+      {!loading && !error && displayed.length > 0 && (
         <div className="cards-grid">
-          {countries.map((country) => (
+          {/* 4. render displayed.map(...) */}
+          {displayed.map(country => (
             <CountryCard key={country.cca3} country={country} />
           ))}
         </div>
       )}
 
-      {/* 8. when not loading, no error, no countries, empty query */}
-      {!loading && !error && countries.length === 0 && !query && (
-        <p className="home__placeholder">
-          Start searching to explore countries.
-        </p>
+      {!loading && !error && displayed.length === 0 && !query && (
+        <p>Start searching to explore countries.</p>
       )}
     </div>
-  );
+  )
 }
 
-export default Home;
+export default Home

@@ -1,18 +1,29 @@
-import { Link } from "react-router-dom";
-import "../styles/App.css";
+// 1. import useTheme from '../context/ThemeContext'
+import { useTheme } from '../context/ThemeContext'
+import { Link } from 'react-router-dom'
+import '../styles/App.css'
 
 function Header() {
+  // 2. destructure theme and toggleTheme from useTheme()
+  const { theme, toggleTheme } = useTheme()
+
   return (
     <header className="header">
-      <Link to="/" className="header__brand">
-        CountryPeek
-      </Link>
+      <Link to="/" className="header__brand">CountryPeek</Link>
       <nav className="header__nav">
         <Link to="/">Home</Link>
         <Link to="/favourites">Favourites</Link>
+
+        {/* 3. add a button inside header__nav */}
+        <button 
+          onClick={toggleTheme} 
+          className="theme-toggle"
+        >
+          {theme === 'light' ? 'Dark Mode' : 'Light Mode'}
+        </button>
       </nav>
     </header>
-  );
+  )
 }
 
-export default Header;
+export default Header
