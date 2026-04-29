@@ -14,7 +14,8 @@ function Home() {
   const [sortBy, setSortBy] = useState('')
 
   useEffect(() => {
-    if (!query) {
+    // ✅ Edge case 1: ignore queries with only spaces
+    if (query.trim() === '') {
       setCountries([])
       setError(null)
       return
@@ -69,16 +70,20 @@ function Home() {
       {loading && <p>Loading...</p>}
       {error && <p className="error">{error}</p>}
 
+      {/* ✅ Edge case 6: show message when no countries match filter */}
       {!loading && !error && displayed.length > 0 && (
         <div className="cards-grid">
-          {/* 4. render displayed.map(...) */}
           {displayed.map(country => (
             <CountryCard key={country.cca3} country={country} />
           ))}
         </div>
       )}
 
-      {!loading && !error && displayed.length === 0 && !query && (
+      {!loading && !error && displayed.length === 0 && query.trim() !== '' && (
+        <p>No countries found for this region.</p>
+      )}
+
+      {!loading && !error && displayed.length === 0 && query.trim() === '' && (
         <p>Start searching to explore countries.</p>
       )}
     </div>

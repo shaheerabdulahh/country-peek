@@ -15,7 +15,7 @@ function CountryCard({ country }) {
     <Link to={`/country/${cca3}`} className="card">
       <img
         src={flags.svg}
-        alt={`${name.common} flag`}
+        alt={`Flag of ${name.common}`}   // meaningful alt text
         className="card__flag"
       />
       <div className="card__body">
@@ -24,9 +24,15 @@ function CountryCard({ country }) {
         <p>Region: {region}</p>
         <p>Capital: {capital?.[0] ?? 'N/A'}</p>
 
-        {/* 4. favourites button */}
+        {/* 4. favourites button with accessibility attributes */}
         <button
           className={`fav-btn ${isSaved ? 'fav-btn--saved' : ''}`}
+          aria-label={
+            isSaved
+              ? `Remove ${name.common} from favourites`
+              : `Save ${name.common} to favourites`
+          }
+          aria-pressed={isSaved}
           onClick={(e) => {
             e.stopPropagation()
             if (isSaved) {

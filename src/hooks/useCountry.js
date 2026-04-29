@@ -28,6 +28,10 @@ function useCountry(code) {
         return res.json()
       })
       .then((data) => {
+        // ✅ Edge case: if API returns empty array, set error
+        if (!data || data.length === 0) {
+          throw new Error(`No country found with code: ${code}`)
+        }
         // the response is an array — store data[0] in country state
         setCountry(data[0])
       })

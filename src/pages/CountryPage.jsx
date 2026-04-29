@@ -13,10 +13,10 @@ function CountryPage() {
   const { country, loading, error } = useCountry(code)
 
   // 4. handle loading state — return a status paragraph
-  if (loading) return <p className="status">Loading country data...</p>
+  if (loading) return <p className="page-status">Loading country data...</p>
 
   // 5. handle error state — return an error paragraph
-  if (error) return <p className="error">Error: {error}</p>
+  if (error) return <p className="page-status page-status--error">Error: {error}</p>
 
   // 6. handle null country — return null
   if (!country) return null
@@ -53,22 +53,23 @@ function CountryPage() {
         {/* flag image with alt text */}
         <img
           src={flags.svg}
-          alt={`${name.common} flag`}
+          alt={`Flag of ${name.common}`}
           className="country-page__flag"
         />
 
         <div className="country-page__info">
           {/* country common name as h2 */}
-          <h2>{name.common}</h2>
+          <h2 className="country-page__name">{name.common}</h2>
           {/* official name as a paragraph */}
-          <p>Official: {name.official}</p>
+          <p className="country-page__official">Official: {name.official}</p>
 
           <div className="country-page__details">
             {/* left column */}
             <div className="details-left">
               <p>Population: {population.toLocaleString()}</p>
               <p>Region: {region}</p>
-              <p>Subregion: {subregion}</p>
+              {/* ✅ Edge case: guard subregion */}
+              <p>Subregion: {subregion ?? 'N/A'}</p>
               <p>Capital: {capital?.[0] ?? 'N/A'}</p>
             </div>
 
